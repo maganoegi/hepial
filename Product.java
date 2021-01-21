@@ -2,11 +2,11 @@
  * Represent an addition expression node inside the AST.
 */
 
-public class Addition extends Arithmetic {
+public class Product extends Arithmetic {
     /**
      * Constructor
      */
-    public Addition(String fl, int line, int col) {
+    public Product(String fl, int line, int col) {
         super(fl, line, col);
     }
 
@@ -14,20 +14,20 @@ public class Addition extends Arithmetic {
      * Get the binary operator
      */
     public String operateur() {
-        return "+";
+        return "*";
     }
 
     /**
      * Apply the operator on the two given values.
      */
     public int apply(int gauche, int droite) {
-        return gauche + droite;
+        return gauche * droite;
     }
     /**
      * Apply the operator on the two given values.
      */
     public boolean apply(boolean gauche, boolean droite) {
-        return ((gauche ? 1 : 0) + (droite ? 1 : 0)) != 0;
+        return ((gauche ? 1 : 0) * (droite ? 1 : 0)) != 0;
     }
 
     /**

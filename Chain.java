@@ -1,17 +1,17 @@
 /*
- * Represent a number node inside the AST.
+ * Represent a string of characters node inside the AST.
 */
 
-public class Number extends Expression {
+public class Chain extends Expression {
     /**
-     * Value contained in this number node
+     * Value contained in this string node
      */
-    private int valeur;
+    private String valeur;
 
     /**
      * Constructor
      */
-    public Number(int val, String fl, int line, int col) {
+    public Chain(String val, String fl, int line, int col) {
         super(fl, line, col);
         this.valeur = val;
     }
@@ -19,7 +19,7 @@ public class Number extends Expression {
     /**
      * Get the node value
      */
-    public int getValeur() {
+    public String getValeur() {
         return this.valeur;
     }
 

@@ -6,7 +6,7 @@ CLASSPATH=$(JAVACUP):.:./TDS:./ArbreAbstrait
 
 FILE_FLEX=hepial.flex
 FILE_CUP=hepial.cup
-FILE_JAVA_NAME=hepiaL
+FILE_JAVA_NAME=Hepialc
 FILE_TEST_PRG_NAME=test
 
 TEST_CLASS=test
@@ -29,4 +29,4 @@ sym.java parser.java : $(FILE_CUP)
 	$(JAVAC) -classpath $(CLASSPATH) $<
 
 clean :
-	rm -rf *class TDS/*class ArbreAbstrait/*class *~ parser.java sym.java $(FILE_JAVA_NAME).java
+	rm -rf *class TDS/*class ArbreAbstrait/*class *~ parser.java sym.java

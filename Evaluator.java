@@ -16,7 +16,7 @@ class Evaluator implements ASTVisitor {
         return instance;
     }
 
-    public Object visiter (Nombre n) {
+    public Object visiter (Number n) {
         return new Integer(n.valeur());
     } // visiter
     
@@ -34,7 +34,7 @@ class Evaluator implements ASTVisitor {
         return new Integer(g+d);
     }
 
-    public Object visiter (Et e) {
+    public Object visiter (And e) {
         Object valG == e.gauche().accepter(this);
         if (valG != null) {
             int valintG = (( Integer )valG).intValue();
