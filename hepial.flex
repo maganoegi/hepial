@@ -33,7 +33,7 @@ closebrack = "]"
 doublepoints = ".."
 tilda = "~"
 
-/* ignored */
+// ignored
 comment = \/\/.*
 blank = [\s|\t|\n|\r]+
 

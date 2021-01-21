@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 action code {:
-
+// jdjdjd
     
 :}
 
@@ -14,27 +14,28 @@ terminal READ, WRITE, RETURN, IF, THEN, ELSE, ENDIF, WHILE, DO, ENDWHILE;
 terminal FOR, FROM, TO, ENDFOR, TRUE, FALSE,  PLUS, MINUS, TIMES, DIVIDE;
 terminal EQUALS, DIFF, INF, INFEQUAL, SUP, SUPEQUAL, AND, OR, TILDA, NOT;
 
-terminal IDENT, STRINGCONST, TINTEGER, TBOOLEAN;
-terminal INTEGERCONST;
+terminal String IDENT, STRINGCONST, TINTEGER, TBOOLEAN;
+terminal int INTEGERCONST;
 
-non terminal program, header;
-non terminal declar_lst, body;
-non terminal instr_lst, declars, declar, declar_var;
-non terminal declar_const;
-non terminal expr, access, operand;
+// Non terminal rules that return a RESULT value
+non terminal ProgramDeclaration program, header;
+non terminal Block declar_lst, body;
+non terminal ArrayList<Instruction> instr_lst, declars, declar, declar_var;
+non terminal ConstantDeclaration declar_const; // donner type -> car redirigé encore
+non terminal Expression expr, access, operand;
 non terminal for_instr;
 non terminal while_instr;
 non terminal return_instr;
 non terminal cond_instr;
 non terminal write_instr;
 non terminal read_instr;
-non terminal instr;
-non terminal assign;
+non terminal Instruction instr;
+non terminal Affectation assign;
 non terminal index;
 non terminal op_una;
-non terminal op_bin;
+non terminal Binary op_bin;
 
-non terminal l_ident;
+non terminal ArrayList<Idf> l_ident;
 non terminal type;
 non terminal typebase;
 
@@ -43,54 +44,79 @@ precedence left PLUS, MINUS, TIMES, DIVIDE, EQUALS, DIFF;
 precedence left INF, SUP, INFEQUAL, SUPEQUAL, AND, OR, DOUBLEPOINTS;
 precedence right TILDA, NOT;
 
-program           ::= header declar_lst STARTPRG body ENDPRG {: System.out.println("ok, c'est good !!!!"); :};
-header            ::= PRG IDENT {: :};
-declar_lst        ::=  declars {: :};
-declars           ::= {: :}
-                      | declars declar {: :};
-declar            ::= declar_var {: :}
-                      | declar_const {: :};
-declar_var        ::= type l_ident SEMICOLON   {:  :};
-l_ident           ::= IDENT {: :}
+program           ::= header:p declar_lst STARTPRG body:instructions ENDPRG
+                    {:  p.setInstructions(instructions);
+                        System.out.println("ok, c'est good !!!!"); 
+                        RESULT = p;
+                    :};
+header            ::= PRG IDENT:id {: RESULT = new ProgramDeclaration(new Idf(id, "", idleft, idright), "", idleft, idright); :};
+declar_lst        ::=  declars:inst {: RESULT = new Block(inst, "", instleft, instright); :}; // bloc d'inst
+declars           ::= {: RESULT = new ArrayList<Instruction>(); :}
+                      | declars:dcs declar:dc {:
+                        ArrayList<Instruction> lst = new ArrayList<>(dcs); // initialise lst avec valeurs de dcs
+                        for(Instruction i : dc) {
+                          lst.add(i); // rajoute des instruction de dc au dcs (lst)
+                        } 
+                        RESULT = lst;
+                      :};
+declar            ::= declar_var:v {: RESULT = v; :}
+                      | declar_const:dc {: 
+                        ArrayList<Instruction> lst = new ArrayList<>(); 
+                        lst.add(dc);
+                        RESULT = lst;
+                      :}; // obligé de rtr liste d'inst pour que ca ,marche au niveau des types; obligé de matcher les types de declar const et ArrayList attendu
+declar_var        ::= type l_ident SEMICOLON   {: RESULT =  :}; // arraylist Idf
+l_ident           ::= IDENT:i {: RESULT =  :}
                       | l_ident COMMA IDENT {:   :};
 type              ::= typebase {:   :};
 typebase          ::= TINTEGER {:   :}
                       | TBOOLEAN {:   :};
-declar_const      ::= CONSTANT type IDENT EQUAL expr SEMICOLON   {:   :};
-expr              ::= expr op_bin expr {:   :}
+declar_const      ::= CONSTANT type IDENT EQUAL expr SEMICOLON   {: /*RESULT = new ConstantDeclaration("", ..., ...)*/ :};
+expr              ::= expr:left op_bin:op expr:right
+                      {:
+                       // build binary expression
+                         op.lierGauche(left);
+                         op.lierDroit(right);
+                         RESULT = op;  
+                      :}
                       | op_una expr {:   :}
                       | OPENPARENT expr CLOSEPARENT {:   :}
-                      | operand               {:   :};
-op_bin            ::= PLUS      {:   :}
-                      | MINUS    {:   :}
-                      | TIMES    {:   :}
-                      | DIVIDE   {:   :}
-                      | EQUALS   {:   :}
-                      | DIFF     {:   :}
-                      | INF      {:   :}
-                      | SUP      {:   :}
-                      | INFEQUAL {:   :}
-                      | SUPEQUAL {:   :}
-                      | AND      {:   :}
-                      | OR       {:   :};
+                      | operand:operand             {:  RESULT = operand;  :};
+op_bin            ::= PLUS:o       {: RESULT = new Addition("", oleft, oright); :}
+                      | MINUS:o  {: RESULT = new Addition("", oleft, oright); :}
+                      | TIMES:o  {: RESULT = new Product("", oleft, oright); :}
+                      | DIVIDE:o {: RESULT = new Division("", oleft, oright); :}
+                      | EQUALS:o {: RESULT = new Equals("", oleft, oright); :} 
+                      | DIFF:o   {: RESULT = new Difference("", oleft, oright); :}
+                      | INF:o    {: RESULT = new Inferior("", oleft, oright); :}
+                      | SUP:o    {: RESULT = new Superior("", oleft, oright); :}
+                      | INFEQUAL:o {: RESULT = new InferiorEqual("", oleft, oright); :}
+                      | SUPEQUAL:o {: RESULT = new SuperiorEqual("", oleft, oright); :}
+                      | AND:o    {: RESULT = new And("", oleft, oright); :}
+                      | OR:o     {: RESULT = new Or("", oleft, oright); :};
 op_una            ::= TILDA      {:   :}
                       | NOT      {:   :}
                       | MINUS    {:   :};
-operand           ::= access   {:   :}
-                      | INTEGERCONST   {:   :}
+operand           ::= access:access       {: RESULT = access; :}
+                      | INTEGERCONST:ib   {: RESULT = new Number(ib, "", ibleft, ibright); :}
                       | TRUE            {:   :}
                       | FALSE           {:   :};
-access            ::= IDENT   {:   :};
-body              ::=  instr_lst {:   :};
-instr_lst         ::= {:  :}
-                      | instr_lst instr   {:   :};
-instr             ::= assign        {:   :}
+access            ::= IDENT:id   {: RESULT = new Idf(id, "", idleft, idright); :};
+body              ::= instr_lst:instructions {: RESULT = new Block(instructions, "", instructionsleft, instructionsright); :};
+instr_lst         ::= {: RESULT = new ArrayList(); :}
+                      | instr_lst:instructionList instr:instruction
+                      {:
+                        ArrayList<Instruction> instructions = new ArrayList<Instruction>(instructionList);
+                        instructions.add(instruction);
+                        RESULT = instructions;
+                      :};
+instr             ::= assign:inst         {: RESULT = inst; :}
                       | write_instr {:   :}
                       | read_instr  {:   :}
                       | cond_instr  {:   :}
                       | while_instr {:   :}
                       | for_instr   {:   :};
-assign            ::= access EQUAL expr SEMICOLON {:   :};
+assign            ::= access:dest EQUAL:e expr:src SEMICOLON {: RESULT = new Affectation(dest, src, "", eleft, eright); :};
 write_instr       ::= WRITE expr SEMICOLON {:   :}
                       | WRITE STRINGCONST SEMICOLON  {:   :};
 read_instr        ::= READ IDENT SEMICOLON   {:   :};
