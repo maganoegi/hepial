@@ -14,7 +14,7 @@ public interface ASTVisitor {
     // Object visit(DeclarationConstant node);
     // Object visit(DeclarationFonction node);
     Object visit(ProgramDeclaration node);
-    // Object visit(DeclarationVariable node);
+    Object visit(VariableDeclaration node);
     Object visit(Difference node);
     Object visit(Division node);
     // Object visit(Ecrire node);
