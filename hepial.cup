@@ -122,8 +122,8 @@ op_una            ::= TILDA      {:   :}
 
 operand           ::= access:access       {: RESULT = access; :}
                       | INTEGERCONST:ib   {: RESULT = new Number(ib, "", ibleft, ibright); :}
-                      | TRUE            {:   :}
-                      | FALSE           {:   :};
+                      | TRUE:o            {: RESULT = new True("", oleft, oright); :}
+                      | FALSE:o           {: RESULT = new False("", oleft, oright); :};
 
 access            ::= IDENT:id   {: RESULT = new Idf(id, "", idleft, idright); :};
 
