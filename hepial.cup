@@ -100,7 +100,7 @@ expr              ::= expr:left op_bin:op expr:right
                          RESULT = op;  
                       :}
                       | op_una expr {:   :}
-                      | OPENPARENT expr:e CLOSEPARENT {: RESULT = Parentheses(e, "", eleft, eright); :} //TODO
+                      | OPENPARENT expr:e CLOSEPARENT {: RESULT = Parentheses(e, "", eleft, eright); :}
                       | operand:operand             {:  RESULT = operand;  :};
 
 op_bin            ::= PLUS:o       {: RESULT = new Addition("", oleft, oright); :}
@@ -137,12 +137,12 @@ instr_lst         ::= {: RESULT = new ArrayList(); :}
                         RESULT = instructions;
                       :};
 
-instr             ::= assign:inst         {: RESULT = inst; :}
-                      | write_instr {:   :}
-                      | read_instr  {:   :}
-                      | cond_instr  {:   :}
-                      | while_instr {:   :}
-                      | for_instr   {:   :};
+instr             ::= assign:inst        {: RESULT = inst; :}
+                      | write_instr:inst {: RESULT = inst; :}
+                      | read_instr:inst  {: RESULT = inst; :}
+                      | cond_instr:inst  {: RESULT = inst; :}
+                      | while_instr:inst {: RESULT = inst; :}
+                      | for_instr:inst   {: RESULT = inst; :};
 
 assign            ::= access:dest EQUAL:e expr:src SEMICOLON {: RESULT = new Affectation(dest, src, "", eleft, eright); :};
 
@@ -327,7 +327,7 @@ instr             ::= assign:inst        {: RESULT = inst; :}
 assign            ::= access:dest EQUAL:e expr:src SEMICOLON {: RESULT = new Affectation(dest, src, "", eleft, eright); :};
 
 write_instr       ::= WRITE expr:e SEMICOLON {: RESULT = new Ecrire("", eleft, eright, e); :}
-                      | WRITE STRINGCONST:str SEMICOLON {: RESULT = new Ecrire("", strleft, strright, str); :};
+                      | WRITE STRINGCONST:str SEMICOLON {: RESULT = new Ecrire("", strleft, strright, str); :}; //TODO
 
 read_instr        ::= READ IDENT:id SEMICOLON {: RESULT = new Lire("", idleft, idright, id); :};
 
