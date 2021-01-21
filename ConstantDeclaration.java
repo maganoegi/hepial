@@ -7,21 +7,21 @@ public class ConstantDeclaration extends Instruction {
      * The declared variable identifier
      */
     protected Idf identifier;
-    /**
-     * The declaration section of the function (list of DeclarationVariable)
-     */
-    protected Block declarations;
-    /**
-     * The body of the function
-     */
-    protected Block instructions;
+    protected Type type;
+    protected Expression expression;
 
     /**
      * Constructor
      */
-    public ConstantDeclaration(Idf identifier, String fl, int line, int col){
+    public ConstantDeclaration(Type t, Idf identifier, Expression expression, String fl, int line, int col){
         super(fl, line, col);
         this.identifier = identifier;
+        this.type = t;
+        this.expression = expression;
+    }
+
+    public Type getType() {
+        return this.type;
     }
 
     /**
@@ -30,17 +30,9 @@ public class ConstantDeclaration extends Instruction {
     public Idf getIdentifier() {
         return this.identifier;
     }
-    /**
-     * Get the declaration section of the function
-     */
-    public Block getDeclaration() {
-        return this.declarations;
-    }
-    /**
-     * Get the body of the function
-     */
-    public Block getInstructions() {
-        return this.instructions;
+
+    public Expression getExpression() {
+        return this.expression;
     }
 
     /**
@@ -48,18 +40,6 @@ public class ConstantDeclaration extends Instruction {
      */
     public void setIdentifier(Idf identifier) {
         this.identifier = identifier;
-    }
-    /**
-     * Set the declarations section of the function
-     */
-    public void setDeclarations(Block declarations) {
-        this.declarations = declarations;
-    }
-    /**
-     * Set the body of the function
-     */
-    public void setInstructions(Block instructions) {
-        this.instructions = instructions;
     }
 
     /**
@@ -69,3 +49,4 @@ public class ConstantDeclaration extends Instruction {
         return visitor.visit(this);
     }
 }
+

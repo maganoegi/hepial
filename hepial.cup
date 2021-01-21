@@ -23,21 +23,21 @@ non terminal Block declar_lst, body;
 non terminal ArrayList<Instruction> instr_lst, declars, declar, declar_var;
 non terminal ConstantDeclaration declar_const; // donner type -> car redirigé encore
 non terminal Expression expr, access, operand;
-non terminal for_instr;
-non terminal while_instr;
-non terminal return_instr;
-non terminal cond_instr;
-non terminal write_instr;
-non terminal read_instr;
-non terminal Instruction instr;
+non terminal For for_instr;                               //TODO
+non terminal While while_instr;                           //TODO
+// non terminal return_instr;
+non terminal Condition cond_instr;                        //TODO
+non terminal Write write_instr;                           //TODO 
+non terminal Read read_instr;                             //TODO
+non terminal Instruction instr;                           
 non terminal Affectation assign;
-non terminal index;
-non terminal op_una;
+// non terminal index;
+non terminal Unary op_una;                                //TODO
 non terminal Binary op_bin;
 
 non terminal ArrayList<Idf> l_ident;
-non terminal type;
-non terminal typebase;
+non terminal Type type;                                   
+non terminal Type typebase;                               
 
 // Precedences
 precedence left PLUS, MINUS, TIMES, DIVIDE, EQUALS, DIFF;
@@ -87,7 +87,10 @@ type              ::= typebase {: RESULT = t; :};
 typebase          ::= TINTEGER {: RESULT = new Int(); :}
                       | TBOOLEAN {: RESULT = new Bool(); :};
 
-declar_const      ::= CONSTANT type IDENT EQUAL expr SEMICOLON   {: /*RESULT = new ConstantDeclaration("", ..., ...)*/ :};
+declar_const      ::= CONSTANT:c type:t IDENT:id EQUAL expr:e SEMICOLON
+                      {:
+                        RESULT = ConstantDeclaration(t, new Idf(id, "", idleft, idright), e, "", cleft, cright);
+                      :};
 
 expr              ::= expr:left op_bin:op expr:right
                       {:
@@ -97,7 +100,7 @@ expr              ::= expr:left op_bin:op expr:right
                          RESULT = op;  
                       :}
                       | op_una expr {:   :}
-                      | OPENPARENT expr CLOSEPARENT {:   :}
+                      | OPENPARENT expr:e CLOSEPARENT {: RESULT = Parentheses(e, "", eleft, eright); :} //TODO
                       | operand:operand             {:  RESULT = operand;  :};
 
 op_bin            ::= PLUS:o       {: RESULT = new Addition("", oleft, oright); :}
@@ -154,6 +157,24 @@ cond_instr        ::= IF expr THEN body ELSE body ENDIF {:   :}
 while_instr       ::= WHILE expr DO body ENDWHILE {:   :};
 
 for_instr         ::= FOR IDENT FROM expr TO expr DO body ENDFOR {:   :};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,3 +1,5 @@
-public class Type {
-    
+
+public abstract class Type {
+
+    public Type() {}
 }
