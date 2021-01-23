@@ -92,7 +92,7 @@ expr              ::= expr:left op_bin:op expr:right
                          op.lierDroit(right);
                          RESULT = op;  
                       :}
-                      | op_una expr {:   :}
+                      | op_una:op expr:expr {: op.lierGauche(expr); RESULT = op; :}
                       | OPENPARENT expr:e CLOSEPARENT {: RESULT = Parentheses(e, "", eleft, eright); :}
                       | operand:operand             {:  RESULT = operand;  :};
 
@@ -142,7 +142,7 @@ assign            ::= access:dest EQUAL:e expr:src SEMICOLON {: RESULT = new Aff
 write_instr       ::= WRITE expr:e SEMICOLON {: /* RESULT = new Write("", eleft, eright, e); */ :} //TODO
                       | WRITE STRINGCONST:str SEMICOLON  {: /* new Write("", strleft, strright, str); */ :}; //TODO
 
-read_instr        ::= READ IDENT:i SEMICOLON   {: RESULT = new Read("", ileft, iright, i); :};
+read_instr        ::= READ IDENT:i SEMICOLON   {: /* RESULT = new Read("", ileft, iright, i); */ :};
 
 cond_instr        ::= IF expr:condition THEN body:then ELSE body:els ENDIF {: RESULT = new Condition(condition, then, els, "", conditionleft, conditionright) :}
                       | IF expr:condition THEN body:then ENDIF {: RESULT = new Condition(condition, then, "", conditionleft, conditionright); :};
@@ -258,7 +258,7 @@ expr              ::= expr:left op_bin:op expr:right
                          op.lierDroit(right);
                          RESULT = op;  
                       :}
-                      | op_una:op expr:exp {: op.lierGauche(exp); RESULT = op;  :}
+                      | op_una:op expr:exp {: op.lier(exp); RESULT = op;  :}
                       | OPENPARENT expr:exp CLOSEPARENT {: RESULT = new Parentheses(exp, "", expleft, expright);  :}
                       | operand:operand             {:  RESULT = operand;  :};
 

@@ -14,7 +14,7 @@ public class And extends Arithmetic {
      * Get the binary operator
      */
     public String operateur() {
-        return "*";
+        return "&&";
     }
 
     /**

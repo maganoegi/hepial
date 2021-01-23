@@ -203,27 +203,27 @@ public class SourceCodeGenerator implements ASTVisitor{
         return null;
     }
 
-    // public Object visit(Non node){
-    //     code += "non ";
-    //     node.getOperand().accept(this);
-    //     return null;
-    // }
+    public Object visit(Not node){
+        code += "non ";
+        node.getOperand().accept(this);
+        return null;
+    }
 
-    // public Object visit(Ou node){
-    //     node.getGauche().accept(this);
-    //     code += " ou ";
-    //     node.getDroite().accept(this);
-    //     return null;
-    // }
+    public Object visit(Or node){
+        node.getGauche().accept(this);
+        code += " ou ";
+        node.getDroite().accept(this);
+        return null;
+    }
 
-    // public Object visit(Parentheses node){
-    //     code += "(";
-    //     node.getExpression().accept(this);
-    //     code += ")";
-    //     return null;
-    // }
+    public Object visit(Parentheses node){
+        code += "(";
+        node.getExpression().accept(this);
+        code += ")";
+        return null;
+    }
 
-    public Object visit(Pour node){
+    public Object visit(For node){
         code += "pour ";
         node.getIteratorName().accept(this);
         code += " allantde ";
@@ -261,19 +261,19 @@ public class SourceCodeGenerator implements ASTVisitor{
         return null;
     }
 
-    // public Object visit(SupEgal node){
-    //     node.getGauche().accept(this);
-    //     code += " >= ";
-    //     node.getDroite().accept(this);
-    //     return null;
-    // }
+    public Object visit(SuperiorEqual node){
+        node.getGauche().accept(this);
+        code += " >= ";
+        node.getDroite().accept(this);
+        return null;
+    }
 
-    // public Object visit(Superieur node){
-    //     node.getGauche().accept(this);
-    //     code += " > ";
-    //     node.getDroite().accept(this);
-    //     return null;
-    // }
+    public Object visit(Superior node){
+        node.getGauche().accept(this);
+        code += " > ";
+        node.getDroite().accept(this);
+        return null;
+    }
 
     public Object visit(While node){
         code += "tantque ";
@@ -288,16 +288,16 @@ public class SourceCodeGenerator implements ASTVisitor{
         return null;
     }
 
-    // public Object visit(Tilda node){
-    //     code += "~";
-    //     node.getOperand().accept(this);
-    //     return null;
-    // }
+    public Object visit(Tilda node){
+        code += "~";
+        node.getOperand().accept(this);
+        return null;
+    }
 
-    // public Object visit(Vrai node){
-    //     code += "vrai";
-    //     return null;
-    // }
+    public Object visit(True node){
+        code += "vrai";
+        return null;
+    }
 
     public String getCode(){
         return code;
