@@ -10,8 +10,8 @@ public interface ASTVisitor {
     // Object visit(Call node);
     Object visit(Block node);
     Object visit(Chain node);
-    // Object visit(Condition node);
-    // Object visit(DeclarationConstant node);
+    Object visit(Condition node);
+    Object visit(ConstantDeclaration node);
     // Object visit(DeclarationFonction node);
     Object visit(ProgramDeclaration node);
     Object visit(VariableDeclaration node);
@@ -20,25 +20,25 @@ public interface ASTVisitor {
     // Object visit(Ecrire node);
     Object visit(Equals node);
     Object visit(And node);
-    // Object visit(Faux node);
+    Object visit(False node);
     Object visit(Idf node);
     // Object visit(Indice node);
     Object visit(InferiorEqual node);
     Object visit(Inferior node);
     // Object visit(Lire node);
-    // Object visit(Moins node);
+    Object visit(Minus node);
     Object visit(Number node);
-    // Object visit(Non node);
+    Object visit(Not node);
     Object visit(Or node);
-    // Object visit(Parentheses node);
-    // Object visit(Pour node);
+    Object visit(Parentheses node);
+    Object visit(For node);
     Object visit(Product node);
     Object visit(Substraction node);
     Object visit(SuperiorEqual node);
     Object visit(Superior node);
-    // Object visit(Tantque node);
-    // Object visit(Tilda node);
-    // Object visit(Vrai node);
+    Object visit(While node);
+    Object visit(Tilda node);
+    Object visit(True node);
 }
 
 
