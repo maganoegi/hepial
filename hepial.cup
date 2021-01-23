@@ -55,17 +55,10 @@ header            ::= PRG IDENT:id {: RESULT = new ProgramDeclaration(new Idf(id
 declar_lst        ::=  declars:inst {: RESULT = new Block(inst, "", instleft, instright); :}; // bloc d'inst
 
 declars           ::= {: RESULT = new ArrayList<Instruction>(); :}
-                      | declars:dcs declar:dc {:
-                        ArrayList<Instruction> lst = new ArrayList<>(dcs); // initialise lst avec valeurs de dcs
-                        for(Instruction i : dc) {
-                          lst.add(i); // rajoute des instruction de dc au dcs (lst)
-                        } 
-                        RESULT = lst;
-                      :};
+                      | declars:dcs declar:dc {: ArrayList<Instruction> lst = new ArrayList<>(dcs); lst.addAll(dc); RESULT = lst; :};
 
 declar            ::= declar_var:v {: RESULT = v; :}
-                      | declar_const:dc {: ArrayList<Instruction> lst = new ArrayList<>(); lst.add(dc); RESULT = lst;
-                      :}; // obligé de rtr liste d'inst pour que ca ,marche au niveau des types; obligé de matcher les types de declar const et ArrayList attendu
+                      | declar_const:dc {: ArrayList<Instruction> lst = new ArrayList<>(); lst.add(dc); RESULT = lst; :}; // obligé de rtr liste d'inst pour que ca ,marche au niveau des types; obligé de matcher les types de declar const et ArrayList attendu
 
 declar_var        ::= type:t l_ident:ids SEMICOLON
                       {: 
@@ -157,21 +150,6 @@ cond_instr        ::= IF expr THEN body ELSE body ENDIF {:   :}
 while_instr       ::= WHILE expr DO body ENDWHILE {:   :};
 
 for_instr         ::= FOR IDENT FROM expr TO expr DO body ENDFOR {:   :};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
