@@ -149,7 +149,7 @@ cond_instr        ::= IF expr:condition THEN body:then ELSE body:els ENDIF {: RE
 
 while_instr       ::= WHILE expr:condition DO body:instruction ENDWHILE {: RESULT = new While(condition, instruction, "", conditionleft, conditionright); :};
 
-for_instr         ::= FOR IDENT FROM expr TO expr DO body ENDFOR {:   :};
+for_instr         ::= FOR IDENT:id FROM expr:from TO expr:to DO body:i ENDFOR {: RESULT = new For(new Idf(id,"",idleft,idright), from, to, instr, "", instrleft, instrright); :};
 
 
 
