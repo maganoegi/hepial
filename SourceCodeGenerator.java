@@ -153,51 +153,50 @@ public class SourceCodeGenerator implements ASTVisitor{
         return null;
     }
 
-    /*
-    public Object visit(Et node){
+    public Object visit(And node){
         node.getGauche().accept(this);
         code += " et ";
         node.getDroite().accept(this);
         return null;
     }
 
-    public Object visit(Faux node){
+    public Object visit(False node){
         code += "faux";
         return null;
     }
-*/
+
     public Object visit(Idf node){
         code += node.getNom();
         return null;
     }
-/*
-    public Object visit(InfEgal node){
+
+    public Object visit(InferiorEqual node){
         node.getGauche().accept(this);
         code += " <= ";
         node.getDroite().accept(this);
         return null;
     }
 
-    public Object visit(Inferieur node){
+    public Object visit(Inferior node){
         node.getGauche().accept(this);
         code += " < ";
         node.getDroite().accept(this);
         return null;
     }
 
-    public Object visit(Lire node){
-        code += "lire ";
-        node.getDestination().accept(this);
-        code += ";";
-        return null;
-    }
+    // public Object visit(Lire node){
+    //     code += "lire ";
+    //     node.getDestination().accept(this);
+    //     code += ";";
+    //     return null;
+    // }
 
-    public Object visit(Moins node){
+    public Object visit(Minus node){
         code += "-";
         node.getOperand().accept(this);
         return null;
     }
-*/
+
     public Object visit(Number node){
         code += Integer.toString(node.getValeur());
         return null;
