@@ -139,13 +139,13 @@ instr             ::= assign:inst        {: RESULT = inst; :}
 
 assign            ::= access:dest EQUAL:e expr:src SEMICOLON {: RESULT = new Affectation(dest, src, "", eleft, eright); :};
 
-write_instr       ::= WRITE expr SEMICOLON {:   :}
-                      | WRITE STRINGCONST SEMICOLON  {:   :};
+write_instr       ::= WRITE expr:e SEMICOLON {: /* RESULT = new Write("", eleft, eright, e); */ :} //TODO
+                      | WRITE STRINGCONST:str SEMICOLON  {: /* new Write("", strleft, strright, str); */ :}; //TODO
 
-read_instr        ::= READ IDENT SEMICOLON   {:   :};
+read_instr        ::= READ IDENT:i SEMICOLON   {: RESULT = new Read("", ileft, iright, i); :};
 
-cond_instr        ::= IF expr THEN body ELSE body ENDIF {:   :}
-                      | IF expr THEN body ENDIF {:   :};
+cond_instr        ::= IF expr:condition THEN body:then ELSE body:els ENDIF {: RESULT = new Condition(condition, then, els, "", conditionleft, conditionright) :}
+                      | IF expr:condition THEN body:then ENDIF {: RESULT = new Condition(condition, then, "", conditionleft, conditionright); :};
 
 while_instr       ::= WHILE expr DO body ENDWHILE {:   :};
 
