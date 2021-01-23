@@ -65,7 +65,7 @@ public class SourceCodeGenerator implements ASTVisitor{
         return null;
     }
 
-   /* public Object visit(Condition node){
+    public Object visit(Condition node){
         code += "si ";
         node.getCondition().accept(this);
         code += " alors";
@@ -83,7 +83,7 @@ public class SourceCodeGenerator implements ASTVisitor{
         code += "finsi";
         return null;
     }
-
+/*
     public Object visit(DeclarationConstant node){
         Symbole sym = TDS.getInstance().identifier(new Entree(node.getIdentifier().getNom()));
 
@@ -275,18 +275,18 @@ public class SourceCodeGenerator implements ASTVisitor{
     //     return null;
     // }
 
-    // public Object visit(Tantque node){
-    //     code += "tantque ";
-    //     node.getCondition().accept(this);
-    //     code += " faire";
-    //     level += 1;
-    //     node.getInstruction().accept(this);
-    //     level -= 1;
-    //     code += "\n";
-    //     addTabulation();
-    //     code += "fintantque";
-    //     return null;
-    // }
+    public Object visit(While node){
+        code += "tantque ";
+        node.getCondition().accept(this);
+        code += " faire";
+        level += 1;
+        node.getInstruction().accept(this);
+        level -= 1;
+        code += "\n";
+        addTabulation();
+        code += "fintantque";
+        return null;
+    }
 
     // public Object visit(Tilda node){
     //     code += "~";

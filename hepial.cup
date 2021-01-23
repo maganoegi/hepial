@@ -147,7 +147,7 @@ read_instr        ::= READ IDENT:i SEMICOLON   {: RESULT = new Read("", ileft, i
 cond_instr        ::= IF expr:condition THEN body:then ELSE body:els ENDIF {: RESULT = new Condition(condition, then, els, "", conditionleft, conditionright) :}
                       | IF expr:condition THEN body:then ENDIF {: RESULT = new Condition(condition, then, "", conditionleft, conditionright); :};
 
-while_instr       ::= WHILE expr DO body ENDWHILE {:   :};
+while_instr       ::= WHILE expr:condition DO body:instruction ENDWHILE {: RESULT = new While(condition, instruction, "", conditionleft, conditionright); :};
 
 for_instr         ::= FOR IDENT FROM expr TO expr DO body ENDFOR {:   :};
 
