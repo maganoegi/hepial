@@ -1,0 +1,25 @@
+programme demo
+entier n1;
+entier n2;
+entier n3;
+entier i;
+entier count;
+
+debutprg
+	n1 = 0;
+	n2 = 1;
+	lire count;
+
+	ecrire n1;
+	ecrire " ";
+	ecrire n2;
+
+	pour i allantde 2 a count faire
+		n3 = n1 + n2;
+		ecrire " ";
+		ecrire n3;
+		n1 = n2;
+		n2 = n3;
+	finpour	
+
+finprg

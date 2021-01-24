@@ -19,7 +19,7 @@ public class SourceCodeGenerator implements ASTVisitor{
     /**
      * If we are currently declaring function parameters
      */
-   //  private boolean isParameterDeclaration = false;
+    private boolean isParameterDeclaration = false;
 
     /**
      * Adds tabulation with current level
@@ -83,9 +83,9 @@ public class SourceCodeGenerator implements ASTVisitor{
         code += "finsi";
         return null;
     }
-/*
-    public Object visit(DeclarationConstant node){
-        Symbole sym = TDS.getInstance().identifier(new Entree(node.getIdentifier().getNom()));
+
+    public Object visit(ConstantDeclaration node){
+        String sym = TDS.getInstance().identifier(node.getIdentifier().getNom());
 
         code += sym + " ";
         node.getIdentifier().accept(this);
@@ -94,7 +94,7 @@ public class SourceCodeGenerator implements ASTVisitor{
         code += ";";
         return null;
     }
-*/
+
     public Object visit(ProgramDeclaration node){
         /* TDS.getInstance().resetBlocNumber();
 
@@ -102,8 +102,8 @@ public class SourceCodeGenerator implements ASTVisitor{
         level += 1;
         */
         code += "programme ";
-        // node.getIdentifier().accept(this);
-        // node.getDeclaration().accept(this);
+        node.getIdentifier().accept(this);
+        node.getDeclaration().accept(this);
         code += "\ndebutprg";
         node.getInstructions().accept(this);
         code += "\nfinprg";
@@ -115,15 +115,15 @@ public class SourceCodeGenerator implements ASTVisitor{
         return null;
     }
 
-    // public Object visit(DeclarationVariable node){
-    //     Symbole sym = TDS.getInstance().identifier(new Entree(node.getIdentifier().getNom()));
+    public Object visit(VariableDeclaration node){
+        String sym = TDS.getInstance().identifier(node.getIdentifier().getNom());
 
-    //     code += sym + " ";
-    //     node.getIdentifier().accept(this);
-    //     if (!isParameterDeclaration)
-    //         code += ";";
-    //     return null;
-    // }
+        code += sym + " ";
+        node.getIdentifier().accept(this);
+        if (!isParameterDeclaration)
+            code += ";";
+        return null;
+    }
 
     public Object visit(Difference node){
         node.getGauche().accept(this);
@@ -139,12 +139,12 @@ public class SourceCodeGenerator implements ASTVisitor{
         return null;
     }
 
-    // public Object visit(Ecrire node){
-    //     code += "ecrire ";
-    //     node.getSource().accept(this);
-    //     code += ";";
-    //     return null;
-    // }
+    public Object visit(Write node){
+        code += "ecrire ";
+        node.getSource().accept(this);
+        code += ";";
+        return null;
+    }
 
     public Object visit(Equals node) {
         node.getGauche().accept(this);
@@ -184,12 +184,12 @@ public class SourceCodeGenerator implements ASTVisitor{
         return null;
     }
 
-    // public Object visit(Lire node){
-    //     code += "lire ";
-    //     node.getDestination().accept(this);
-    //     code += ";";
-    //     return null;
-    // }
+    public Object visit(Read node){
+        code += "lire ";
+        node.getDestination().accept(this);
+        code += ";";
+        return null;
+    }
 
     public Object visit(Minus node){
         code += "-";

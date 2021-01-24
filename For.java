@@ -17,8 +17,8 @@ public class For extends Instruction {
         this.instruction = instruction;
     }
 
-    public String getIteratorName() {
-        return this.iterator.getNom();
+    public Idf getIteratorName() {
+        return this.iterator;
     }
 
     public Expression getFrom() {

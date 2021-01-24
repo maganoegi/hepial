@@ -3,23 +3,22 @@
 
 
 
+
+
+
+
 public class Write extends Instruction {
 
-    private Expression expression;
-    /**
-     * Constructor
-     */
-    public Write(Expression e, String fl, int line, int col) {
+    protected Expression expression;
+
+
+
+    public Write(Expression e, String fl, int line, int col){
         super(fl, line, col);
         this.expression = e;
     }
 
-    public Write(String s, String fl, int line, int col) {
-        super(fl, line, col);
-        // this.expression = e;
-    }
-
-    public Expression getExpression() {
+    public Expression getSource() {
         return this.expression;
     }
 
@@ -30,4 +29,3 @@ public class Write extends Instruction {
         return visitor.visit(this);
     }
 }
-

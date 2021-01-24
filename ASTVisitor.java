@@ -17,7 +17,7 @@ public interface ASTVisitor {
     Object visit(VariableDeclaration node);
     Object visit(Difference node);
     Object visit(Division node);
-    // Object visit(Ecrire node);
+    Object visit(Write node); //TODO
     Object visit(Equals node);
     Object visit(And node);
     Object visit(False node);
@@ -25,7 +25,7 @@ public interface ASTVisitor {
     // Object visit(Indice node);
     Object visit(InferiorEqual node);
     Object visit(Inferior node);
-    // Object visit(Lire node);
+    Object visit(Read node);
     Object visit(Minus node);
     Object visit(Number node);
     Object visit(Not node);

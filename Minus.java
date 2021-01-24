@@ -25,6 +25,7 @@ public class Minus extends Unary {
 
     public boolean apply(boolean value) {
         return !value;
+    }
     
 
     /**

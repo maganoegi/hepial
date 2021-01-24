@@ -8,4 +8,9 @@ public class Bool extends Type {
     public Bool() {
         super();
     }
+
+    @Override
+    public String toString() {
+        return "booleen";
+    }
 }

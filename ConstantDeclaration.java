@@ -31,7 +31,7 @@ public class ConstantDeclaration extends Instruction {
         return this.identifier;
     }
 
-    public Expression getExpression() {
+    public Expression getConstantExpression() {
         return this.expression;
     }
 
