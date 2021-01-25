@@ -14,10 +14,19 @@ public class TDS {
 
     public String identifier(String entry) {
         return this.vars.get(entry).toString();
+        // return (this.vars.size() > 0) ? this.vars.get(entry).toString() : "";
     }
 
     public static void put(String key, Type value) {
         TDS.getInstance().vars.put(key, value);
+    }
+
+    public boolean containsKey(String key) {
+        return this.vars.containsKey(key);
+    }
+
+    public void flush() {
+        this.vars = new HashMap<>();
     }
 
     @Override

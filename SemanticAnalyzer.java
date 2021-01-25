@@ -3,21 +3,20 @@ import java.util.*;
 
 public class SemanticAnalyzer implements ASTVisitor {
 
-	private Map<String, Class> variables;
 	private boolean declarationFinished; 
 
 	public SemanticAnalyzer() {
-		this.variables = new HashMap<>();
 		this.declarationFinished = false;
 	}
 
     public Object visit(ProgramDeclaration node){
+        TDS.getInstance().flush();
         if(node.getIdentifier().getNom().length() > 0) {
         	node.getDeclaration().accept(this);
             this.declarationFinished = true;
 	        node.getInstructions().accept(this);
         } else {
-        	this.displayError(node, "A name for the program has been not defined!");
+        	this.showError(node, "program name not defined");
         }
         return null;
     }
@@ -28,17 +27,17 @@ public class SemanticAnalyzer implements ASTVisitor {
     	if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Not same class type to addition");
+    	this.showError(node, "Type mismatch for addition");
         return null;
     }
 
     public Object visit(Division node){
-    	node.getGauche().accept(this);
-        node.getDroite().accept(this);
-        if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
-    		return null;
+    	node.getGauche().accept(this); // va plus loin recursivement...
+        node.getDroite().accept(this); // va plus loin recursivement...
+        if(node.getGauche().getClass().equals(node.getDroite().getClass())) { // si les deux classes à diviser sont les MEMES..
+    		return null; // pas de problème...
     	}
-    	this.displayError(node, "Not same class type to divide");
+    	this.showError(node, "Type mismatch for division"); // Sinon: ERREUR
         return null;
     }
 
@@ -48,7 +47,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Not same class type to multiply");
+    	this.showError(node, "Type mismatch for multiplication");
         return null;
     }
 
@@ -58,7 +57,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Not same class type to substrate");
+    	this.showError(node, "Type mismatch for substraction");
         return null;
     }
 
@@ -71,12 +70,11 @@ public class SemanticAnalyzer implements ASTVisitor {
     public Object visit(Affectation node){
         node.getDestination().accept(this);
         node.getSource().accept(this);
-        System.out.println(TDS.getInstance().identifier(((Idf)node.getDestination()).getNom()));
-        System.out.println(node.getSource().getClass());
+
         if(TDS.getInstance().identifier(((Idf)node.getDestination()).getNom()).equals(node.getSource().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Not same class type to affectation");
+    	this.showError(node, "Type mismatch for affectation");
         return null;
     }
 
@@ -98,7 +96,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Type mismatch in >=");
+    	this.showError(node, "Type mismatch in >=");
         return null;
     }
 
@@ -108,7 +106,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Type mismatch in >");
+    	this.showError(node, "Type mismatch in >");
         return null;
     }
 
@@ -136,7 +134,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Type mismatch in ==");
+    	this.showError(node, "Type mismatch in ==");
         return null;
     }
 
@@ -147,7 +145,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Type mismatch in AND");
+    	this.showError(node, "Type mismatch in AND");
         return null;
     }
 
@@ -157,7 +155,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Type mismatch in Or");
+    	this.showError(node, "Type mismatch in Or");
         return null;
     }
 
@@ -167,7 +165,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Type mismatch in <=");
+    	this.showError(node, "Type mismatch in <=");
         return null;
     }
 
@@ -177,7 +175,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getGauche().getClass().equals(node.getDroite().getClass())) {
     		return null;
     	}
-    	this.displayError(node, "Type mismatch in <");
+    	this.showError(node, "Type mismatch in <");
         return null;
     }
 
@@ -202,26 +200,26 @@ public class SemanticAnalyzer implements ASTVisitor {
     public Object visit(ConstantDeclaration node) {
         node.getIdentifier().accept(this);
 
-        if(!this.variables.containsKey(node.getIdentifier().getNom())) {
-     		this.variables.put(node.getIdentifier().getNom(), node.getType().getClass());
+        if(!TDS.getInstance().containsKey(node.getIdentifier().getNom())) {
+            TDS.put(node.getIdentifier().getNom(), node.getType());
      		if(node.getIdentifier().getClass().equals(node.getConstantExpression().getClass())) {
      			return null;
      		}
-     		this.displayError(node, "Not same class type in declaration constant");
+     		this.showError(node, "Not same class type in declaration constant");
      		return null;
         }
-        this.displayError(node, node.getIdentifier().getNom() + " has already been declared");
+        this.showError(node, node.getIdentifier().getNom() + " has already been declared");
         return null;
     }
-
+    
     public Object visit(VariableDeclaration node) {
         node.getIdentifier().accept(this);
-
-        if(!this.variables.containsKey(node.getIdentifier().getNom())) {
-     		this.variables.put(node.getIdentifier().getNom(), node.getType().getClass());
-     		return null;
+        
+        if(!TDS.getInstance().containsKey(node.getIdentifier().getNom())) {
+            TDS.put(node.getIdentifier().getNom(), node.getType());
+            return null;
         }
-        this.displayError(node, node.getIdentifier().getNom() + " has already been declared");
+        this.showError(node, node.getIdentifier().getNom() + " has already been declared");
         return null;
     }
 
@@ -234,11 +232,11 @@ public class SemanticAnalyzer implements ASTVisitor {
     }
 
     public Object visit(Idf node){
-    	if(this.variables.containsKey(node.getNom())) {
+    	if(!TDS.getInstance().containsKey(node.getNom())) {
     		return null;
     	}
     	if(this.declarationFinished) {
-    		this.displayError(node, node.getNom() + " has not been declared in header!");
+    		this.showError(node, node.getNom() + " has not been declared in header!"); // BUG
     	}
         return null;
     }
@@ -248,7 +246,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getOperand().getClass().equals(Bool.class)) {
         	return null;
         }
-        this.displayError(node, "Variable needs to be a boolean for Tilda operator");
+        this.showError(node, "Variable needs to be a boolean for Tilda operator");
         return null;
     }
 
@@ -257,7 +255,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getOperand().getClass().equals(Int.class)) {
         	return null;
         }
-        this.displayError(node, "Variable needs to be a integer for Minus operator");
+        this.showError(node, "Variable needs to be a integer for Minus operator");
         return null;
     }
 
@@ -266,7 +264,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         if(node.getOperand().getClass().equals(Bool.class)) {
         	return null;
         }
-        this.displayError(node, "Variable needs to be a boolean for Not operator");
+        this.showError(node, "Variable needs to be a boolean for Not operator");
         return null;
     }
 
@@ -281,7 +279,7 @@ public class SemanticAnalyzer implements ASTVisitor {
         return null;
     }
 
-    public void displayError(ASTNode node, String message) {
+    public void showError(ASTNode node, String message) {
     	System.out.println(message + "\n\tLine : " + (node.getLine() + 1) + " Col : " + node.getColumn());
         System.exit(0);
     }

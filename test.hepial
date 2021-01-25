@@ -11,12 +11,10 @@ debutprg
 	lire count;
 
 	ecrire n1;
-	ecrire " ";
 	ecrire n2;
 
 	pour i allantde 2 a count faire
 		n3 = n1 + n2;
-		ecrire " ";
 		ecrire n3;
 		n1 = n2;
 		n2 = n3;

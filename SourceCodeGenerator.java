@@ -105,7 +105,9 @@ public class SourceCodeGenerator implements ASTVisitor{
         node.getIdentifier().accept(this);
         node.getDeclaration().accept(this);
         code += "\ndebutprg";
+        level += 1;
         node.getInstructions().accept(this);
+        level -= 1;
         code += "\nfinprg";
 
         /*
